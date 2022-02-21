@@ -14,18 +14,24 @@ export opaque type PluginId: string = string;
 
 const regex = /^[a-z0-9-]+$/;
 
+export function fromStringRaw(s: string): PluginId {
+  return s;
+}
+
 export function fromString(s: string): PluginId {
+  // TODO pluginID mess around
   s = s.toLowerCase();
+  /*
   const pieces = s.split("/");
   if (pieces.length !== 2) {
-    throw new Error(`PluginId must have exactly one "/" separator; got "${s}"`);
+   //  throw new Error(`PluginId must have exactly one "/" separator; got "${s}"`);
   }
   if (!pieces[0].match(regex)) {
-    throw new Error(`plugin owner not valid: "${pieces[0]}"`);
+   // throw new Error(`plugin owner not valid: "${pieces[0]}"`);
   }
   if (!pieces[1].match(regex)) {
     throw new Error(`plugin name not valid: "${pieces[1]}"`);
-  }
+  }*/
   return s;
 }
 

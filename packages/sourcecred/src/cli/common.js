@@ -42,8 +42,13 @@ function _makeDirectories(
   prefix: $ReadOnlyArray<string>,
   pluginId: string
 ): {relativePath: string, absolutePath: string} {
+  // TODO  Check this 
   verifyPluginId(pluginId);
-  const idParts = pluginId.split("/");
+  let idParts = pluginId.split("/");
+
+  if(idParts.length !== 2){
+    idParts = ["package", pluginId] 
+  }
 
   const [pluginOwner, pluginName] = idParts;
   const pathComponents = [...prefix, pluginOwner, pluginName];

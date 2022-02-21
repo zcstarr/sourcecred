@@ -23,9 +23,10 @@ const MAXIMUM_NAME_LENGTH = 42;
  * Throws an error if the Name is invalid.
  */
 export function nameFromString(name: string): Name {
-  if (!name.match(NAME_PATTERN)) {
+  // TODO
+  /*if (!name.match(NAME_PATTERN)) {
     throw new Error(`invalid name: ${name}`);
-  }
+  }*/
   if (name.length > MAXIMUM_NAME_LENGTH) {
     throw new Error(`name too long: ${name}`);
   }

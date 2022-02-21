@@ -157,8 +157,18 @@ export class LocalInstance extends ReadInstance implements Instance {
     pluginId: string
   ): string {
     const idParts = pluginId.split("/");
+    /* TODO fix
     if (idParts.length !== 2) {
       throw new Error(`Bad plugin name: ${pluginId}`);
+    } */
+    if(idParts.length === 1){
+      const pathComponents = [...components,idParts[0]];
+      let path = this._baseDirectory;
+      for (const pc of pathComponents) {
+        path = pathJoin(path, pc);
+        mkdirx(path);
+      }
+      return pathJoin(...pathComponents);
     }
     const [pluginOwner, pluginName] = idParts;
     const pathComponents = [...components, pluginOwner, pluginName];
