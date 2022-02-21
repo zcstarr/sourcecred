@@ -9,6 +9,16 @@ import type {ReferenceDetector} from "../../core/references";
 import {type WeightedGraph} from "../../core/weightedGraph";
 import type {IdentityProposal} from "../../core/ledger/identityProposal";
 
+
+function isConstructor(f) {
+  try {
+    new f();
+  } catch (err) {
+    // verify err is the expected error and then
+    return false;
+  }
+  return true;
+}
 export class PackagePlugin implements Plugin {
   id: PluginId;
   plugin: Plugin;
@@ -24,7 +34,15 @@ export class PackagePlugin implements Plugin {
       ? path.resolve(process.cwd(), this.id)
       : this.id;
     try {
-      this.plugin = (new (await import(pluginModule)).default(): Plugin);
+      const importedPlugin = await import(/* webpackIgnore: true */pluginModule);
+      if (isConstructor(importedPlugin.default)){
+        this.plugin = new importedPlugin.default();
+      } //.default.default is a possible artifact of babeljs transpilation
+      else if(importedPlugin.default && isConstructor(importedPlugin.default.default)){
+        this.plugin = new importedPlugin.default.default();
+      }else{
+        this.plugin = new importedPlugin();
+      }
     } catch (e) {
       throw new Error(
         `Could not load dynamically imported plugin: ${e.message}`
