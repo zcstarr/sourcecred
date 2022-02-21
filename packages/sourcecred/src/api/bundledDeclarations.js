@@ -13,6 +13,7 @@ import {
   ExternalPlugin,
   ExternalPluginIdOwner,
 } from "../plugins/external/plugin";
+import { PackagePlugin } from "../plugins/package/plugin";
 
 export async function getPluginDeclaration(
   pluginId: PluginId,
@@ -28,7 +29,14 @@ export async function getPluginDeclaration(
   if (mapping[pluginId.toString()]) return mapping[pluginId.toString()];
   if (getPluginOwner(pluginId) === ExternalPluginIdOwner)
     return await new ExternalPlugin({pluginId, storage}).declaration();
-  throw "Bad declaration: " + JSON.stringify(pluginId);
+
+  return new PackagePlugin({pluginId}).declaration()
+/*  const plugin =  getPlugin(pluginId);
+  if(plugin)
+    return plugin.declaration()
+    */
+  // TODO
+  // throw "Bad declaration: " + JSON.stringify(pluginId);
 }
 
 export async function upgradeRawInstanceConfig(
